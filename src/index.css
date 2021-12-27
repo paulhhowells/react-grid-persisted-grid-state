@@ -1,0 +1,38 @@
+html, body {
+	margin: 0; padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.main {
+	min-height: 100vh;
+	margin: 0 1rem;
+	padding: 0;
+	overflow: hidden;
+}
+.main h1 {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-weight: 200;
+	font-size: 2rem;
+	color: #333;
+}
+
+div[col-id="price"] {
+	font-variant-numeric: tabular-nums;
+}
+
+.grid {
+	width: 100%;
+	height: calc(100vh - 6rem);
+}
