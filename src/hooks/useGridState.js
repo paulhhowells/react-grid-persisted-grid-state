@@ -1,9 +1,8 @@
 import React from 'react';
 
-// TODO: migrate state ?
 const gridPersistenceVersion = '1.0';
 
-export const useGridState = ({persistedState, persistState}) => {
+export const useGridState = ({persistedState, persistState, columnDefs}) => {
 	let timeoutId = null;
 
 	const [gridState, dispatch] = React.useReducer(
@@ -21,9 +20,28 @@ export const useGridState = ({persistedState, persistState}) => {
 		},
 		persistedState,
 		function gridStateInit (appState) {
+			const { grid } = appState;
+			let { version = gridPersistenceVersion } = appState;
+
+			// TODO: migrate state:
+			// Developers should change the version string when they change column definitions.
+			// Users do not want to lose their persisted settings whenever the app is updated.
+			// What might change?
+			// Column Defs might have a different set of columns, so update columnState,
+			// and remove columns as needed from filterModel.
+			if ( version !== gridPersistenceVersion ) {
+				// Then migrate if needed.
+
+				// Compare to colDefs, & find new and removed columns.
+				// Gracefully remove deprecated columns from columnState & filterModel.
+				// Gracefully add new columns base on siblings in colDefs, else insert at colDef index.
+
+				version = gridPersistenceVersion;
+			}
+
 			const initialState = {
-				...appState.grid,
-				version: gridPersistenceVersion, // this overwrites, there should be a default, but handle migration
+				...grid,
+				version,
 			};
 
 			return initialState;
@@ -35,7 +53,9 @@ export const useGridState = ({persistedState, persistState}) => {
 	}, [gridState, persistState]);
 
 	return {
+		onFilterChanged,
 		onFirstDataRendered,
+
 		// Use onGridColumnStateChanged for:
 		// onColumnMoved
 		// onColumnPinned
@@ -46,8 +66,10 @@ export const useGridState = ({persistedState, persistState}) => {
 		// onColumnVisible
 		// onSortChanged
 		onGridColumnStateChanged,
-		//
-		onFilterChanged,
+
+		// Note that params.api.setSortModel(sortModel) has been deprecated,
+		// and params.api.applyColumnState should be used instead.
+
 		// Apply as an attribute to <AgGridReact /> whenever toggleGroupingUI is used.
 		// agGridReactKey: 1,
 		// toggleGroupingUI: () => {},
@@ -71,11 +93,6 @@ export const useGridState = ({persistedState, persistState}) => {
 		if (filterModel) {
 			params.api.setFilterModel(filterModel);
 		}
-
-		// Deprecated: use applyColumnState instead
-		// if (sortModel) {
-		// 	params.api.setSortModel(sortModel);
-		// }
 	}
 
 	function onGridColumnStateChanged (params) {
