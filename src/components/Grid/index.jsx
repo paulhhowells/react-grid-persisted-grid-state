@@ -140,7 +140,6 @@ function Grid () {
 		// so hack to reset react component.
 		setGridKey((gridKey === 0) ? 1 : 0);
 	}
-
 }
 
 export default Grid;
