@@ -32,7 +32,12 @@ div[col-id="price"] {
 	font-variant-numeric: tabular-nums;
 }
 
+.main > button {
+	margin-right: 1em;
+	margin-bottom: 0.75em;
+}
+
 .grid {
 	width: 100%;
-	height: calc(100vh - 6rem);
+	height: calc(100vh - 8rem);
 }
