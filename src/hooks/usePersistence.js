@@ -2,9 +2,12 @@ import React from 'react';
 
 const APP_NAME = process.env.REACT_APP_NAME;
 const USER_NAME = 'me';
-const PERSISTENCE_NAMESPACE = APP_NAME + '.' + USER_NAME;
 
-export const usePersistence = () => {
+export const usePersistence = (ID) => {
+	const persistenceNamespace = (ID)
+		? APP_NAME + '.' + USER_NAME + '.' + ID
+		: APP_NAME + '.' + USER_NAME;
+
 	const { current: persistedState } = React.useRef(initState());
 
 	const [currentState, dispatch] = React.useReducer(
@@ -27,8 +30,8 @@ export const usePersistence = () => {
 
 	const currentStateString = JSON.stringify(currentState);
 	React.useEffect(() => {
-		localStorage.setItem(PERSISTENCE_NAMESPACE, currentStateString)
-	}, [currentStateString]);
+		localStorage.setItem(persistenceNamespace, currentStateString)
+	}, [currentStateString, persistenceNamespace]);
 
 	const persistState = React.useCallback((key, value) => dispatch({ key, value }), []);
 
@@ -36,7 +39,7 @@ export const usePersistence = () => {
 
 	function initState () {
 		const defaultState = {};
-		const state = localStorage.getItem(PERSISTENCE_NAMESPACE);
+		const state = localStorage.getItem(persistenceNamespace);
 		const initialState = (state !== null && state !== undefined)
 			? JSON.parse(state)
 			: defaultState;
