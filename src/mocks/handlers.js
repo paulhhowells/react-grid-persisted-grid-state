@@ -25,6 +25,20 @@ export const handlers = [
     // const makes = req.url.searchParams.getAll('makes')
 
 		const results = [
+			...toyota,
+			...ford,
+			...porsche,
+		];
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        results,
+      }),
+    );
+  }),
+	rest.get('/tree', (req, res, ctx) => {
+		const results = [
 			...makes,
 			...toyota,
 			...ford,
